@@ -60,6 +60,7 @@ namespace MyScreenPrint
 
         }
 
+        #region 鼠标事件
         // 鼠标按下
         private void Cutter_MouseDown(object sender, MouseEventArgs e)
         {
@@ -74,7 +75,6 @@ namespace MyScreenPrint
                 }
             }
         }
-
         // 鼠标移动
         private void Cutter_MouseMove(object sender, MouseEventArgs e)
         {
@@ -95,13 +95,20 @@ namespace MyScreenPrint
                 g.DrawRectangle(pen, rect);
             }
         }
-
         // 鼠标松开
         private void Cutter_MouseUp(object sender, MouseEventArgs e)
         {
             if(e.Button == MouseButtons.Left)
             {
                 isCatchStart = false;
+
+                Update();
+
+                // 保存图片到图片框
+                Bitmap bmp = new Bitmap(width, height);
+                Graphics g = Graphics.FromImage(bmp);
+                g.DrawImage(BackgroundImage, new Rectangle(0, 0, width, height), new Rectangle(rectX, rectY, width, height), GraphicsUnit.Pixel);
+                Form1.catchBmp = bmp;
 
                 // 确定按钮
                 OK_btn = new Button();
@@ -115,17 +122,10 @@ namespace MyScreenPrint
                 // 绘制矩形区域
                 Rectangle rect = new Rectangle(rectX, rectY, width, height);
                 Pen pen = new Pen(Color.Red, 5);
-
-                Graphics g = this.CreateGraphics();
+                g = this.CreateGraphics();
                 g.DrawRectangle(pen, rect);
-
-                // 保存图片到图片框
-                Bitmap bmp = new Bitmap(width, height);
-                g = Graphics.FromImage(bmp);
-                g.CopyFromScreen(new Point(rectX, rectY), new Point(0, 0), new Size(width, height));
-
-                Form1.catchBmp = bmp;
             }
         }
+        #endregion
     }
 }
